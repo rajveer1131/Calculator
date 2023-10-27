@@ -1,132 +1,130 @@
-const decimal = document.getElementById('decimal');
-const signChange = document.getElementById('plus-minus-sign');
-const zero = document.getElementById('zero');
-const one = document.getElementById('one');
-const two = document.getElementById('two');
-const three = document.getElementById('three');
-const four = document.getElementById('four');
-const five = document.getElementById('five');
-const six = document.getElementById('six');
-const seven = document.getElementById('seven');
-const eight = document.getElementById('eight');
-const nine = document.getElementById('nine');
-const plus = document.getElementById('add');
-const minus = document.getElementById('minus');
-const multiply = document.getElementById('multiply');
-const divide = document.getElementById('divide');
-const modulus = document.getElementById('modulus');
-const equalsTo = document.getElementById('equalsTo');
-const allClear = document.getElementById('clear-sign');
+const outputDisplay = document.getElementById("output");
+const equalsTo = document.getElementById("equalsTo");
 
-const inputWindow = document.getElementById('input');
+const number = document.querySelectorAll(".number");
+const operator = document.querySelectorAll(".operator");
 
-var formula="";
-allClear.addEventListener('click',()=>{
-    inputWindow.value="";
-    formula="";
+const clear = document.getElementById("clear");
+const allClear = document.getElementById("all-clear");
 
-})
-one.addEventListener('click',()=>{
-    
-    formula+="1";
-    inputWindow.value=`${formula}`;
-    
+var n1 = "";
+var n2 = "";
+var op = "";
 
-})
-two.addEventListener('click',()=>{
-    formula+="2";
-    inputWindow.value=`${formula}`;
+const updateDisplay = () => {
+  result = `${n1}${op}${n2}`;
+  outputDisplay.textContent = result;
+};
+const clearAll = () => {
+  n1 = "";
+  n2 = "";
+  op = "";
+  result = "";
+  updateDisplay();
+};
 
-})
-three.addEventListener('click',()=>{
-    formula+="3";
-    inputWindow.value=`${formula}`;
+const calculate = () => {
+  let a = Number(n1);
+  let b = Number(n2);
+  let sum = 0;
+  if (op == "÷") {
+    op = "/";
+  }
+  switch (op) {
+    case "+":
+      sum = a + b;
+      break;
+    case "-":
+      sum = a - b;
+      break;
+    case "x":
+      sum = a * b;
+      break;
+    case "/":
+      sum = a / b;
+      break;
+    case "%":
+      sum = a % b;
+      break;
+  }
+  console.log(sum);
+  
+  sum = sum.toFixed(2);
 
-})
-four.addEventListener('click',()=>{
-    formula+="4";
-    inputWindow.value=`${formula}`;
+  result = sum;
+  n1 = result;
+  op = "";
+  n2 = "";
 
-})
-five.addEventListener('click',()=>{
-    formula+="5";
-    inputWindow.value=`${formula}`;
+  updateDisplay();
+};
 
-})
-six.addEventListener('click',()=>{
-    formula+="6";
-    inputWindow.value=`${formula}`;
+var result = "00";
+outputDisplay.value = result;
 
-})
-seven.addEventListener('click',()=>{
-    formula+="7";
-    inputWindow.value=`${formula}`;
+number.forEach((e) => {
+  e.addEventListener("click", (e) => {
+    console.log(e.target);
+    const clickedButtonText = e.target.value;
 
-})
-eight.addEventListener('click',()=>{
-    formula+="8";
-    inputWindow.value=`${formula}`;
-
-})
-nine.addEventListener('click',()=>{
-    formula+="9";
-    inputWindow.value=`${formula}`;
-
-})
-zero.addEventListener('click',()=>{
-    formula+="0";
-    inputWindow.value=`${formula}`;
-
-})
-decimal.addEventListener('click',()=>{
-    formula+=".";
-    inputWindow.value=`${formula}`;
-
-})
-plus.addEventListener('click',()=>{
-    formula+="+";
-    inputWindow.value=`${formula}`;
-
-})
-minus.addEventListener('click',()=>{
-    formula+="-";
-    inputWindow.value=`${formula}`;
-
-})
-multiply.addEventListener('click',()=>{
-    formula+="x";
-    inputWindow.value=`${formula}`;
-
-})
-divide.addEventListener('click',()=>{
-    
-    formula+="÷";
-    inputWindow.value=`${formula}`;
-
-})
-modulus.addEventListener('click',()=>{
-    formula+="%";
-    inputWindow.value=`${formula}`;
-
-})
-signChange.addEventListener('click',()=>{
-    formula=formula.slice(0,-1);
-    inputWindow.value=`${formula}`;
-
-})
-equalsTo.addEventListener('click',()=>{
-    if(formula.includes("x")){
-        formula=formula.replace("x","*");
+    if (op === "") {
+      if (n1.includes(".") && clickedButtonText === ".") {
+      } else {
+        n1 += clickedButtonText;
+        console.log("n1: " + n1);
+      }
+    } else {
+      if (n2.includes(".") && clickedButtonText === ".") {
+      } else {
+        n2 += clickedButtonText;
+        console.log("n2: " + n2);
+      }
     }
-    if(formula.includes("÷")){
-        formula=formula.replace("÷","/");
+
+    updateDisplay();
+    console.log("Text clicked: " + clickedButtonText);
+  });
+});
+operator.forEach((e) => {
+  e.addEventListener("click", (e) => {
+    const clickedButtonText = e.target.textContent;
+    console.log("result:", result);
+    console.log("clickedButtonText:", clickedButtonText);
+
+    if (n1 === "") {
+      outputDisplay.value = "Enter number";
+    } else {
+      if (n2 == "") {
+        op = clickedButtonText;
+      } else if (n2 != "") {
+        calculate();
+      }
+
+      op = clickedButtonText;
+      console.log("op: " + op);
+
+      updateDisplay();
     }
-    let op = eval(formula);
-    formula="";
-    inputWindow.value=`${op}`;
+    console.log("Text clicked: " + clickedButtonText);
+  });
+});
 
-})
+allClear.addEventListener("click", () => {
+  clearAll();
+});
 
+clear.addEventListener("click", () => {
+  if (n2 != "") {
+    n2 = n2.slice(0, -1);
+  } else if (op != "") {
+    op = op.slice(0, -1);
+  } else {
+    n1 = n1.slice(0, -1);
+  }
+  result = result.slice(0, -1);
+  outputDisplay.textContent = result;
+});
 
-
-// window.console.log(inputWindow.);
+equalsTo.addEventListener("click", () => {
+  calculate();
+});
